@@ -7,6 +7,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Exceptions;
 using System.Linq;
+using TelegaBot.DataBase;
 
 namespace TelegaBot
 {

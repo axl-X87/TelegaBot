@@ -68,49 +68,49 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectClass.cs" />
-    <Compile Include="DataBase.Context.cs">
+    <Compile Include="Scripts\ConnectClass.cs" />
+    <Compile Include="DataBase\DataBase.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataBase.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataBase.cs">
+    <Compile Include="DataBase\DataBase.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataBase.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataBase.Designer.cs">
+    <Compile Include="DataBase\DataBase.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataBase.edmx</DependentUpon>
     </Compile>
-    <Compile Include="InlineCommands.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Scripts\InlineCommands.cs" />
+    <Compile Include="Scripts\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextCommands.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="TovarList.cs">
+    <Compile Include="Scripts\TextCommands.cs" />
+    <Compile Include="Scripts\Token.cs" />
+    <Compile Include="DataBase\TovarList.cs">
       <DependentUpon>DataBase.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="DataBase.edmx">
+    <EntityDeploy Include="DataBase\DataBase.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataBase.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="DataBase.edmx.diagram">
+    <None Include="DataBase\DataBase.edmx.diagram">
       <DependentUpon>DataBase.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataBase.Context.tt">
+    <Content Include="DataBase\DataBase.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataBase.Context.cs</LastGenOutput>
       <DependentUpon>DataBase.edmx</DependentUpon>
     </Content>
-    <Content Include="DataBase.tt">
+    <Content Include="DataBase\DataBase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataBase.edmx</DependentUpon>
       <LastGenOutput>DataBase.cs</LastGenOutput>

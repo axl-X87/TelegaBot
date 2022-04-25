@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TelegaBot
+namespace TelegaBot.DataBase
 {
     using System;
     using System.Collections.Generic;
