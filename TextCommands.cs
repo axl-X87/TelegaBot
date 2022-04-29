@@ -21,6 +21,10 @@ namespace TelegaBot
                 {
                     telegram.SendTextMessageAsync(message.Chat, "/StartAction\n/StopAction\n/FuckYou\n/OhShitImSorry");
                 }
+                else if (command == "/key")
+                {
+                    telegram.SendTextMessageAsync(message.Chat, "Text", null, null, false, false, 0, false, InlineCommands.keyboardKalKAL);
+                }
                 else if (command == "/StartAction")
                 {
                     active = true;
