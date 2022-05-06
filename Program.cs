@@ -16,30 +16,32 @@ namespace TelegaBot
 
     public class Program
     {
-        public static ITelegramBotClient bot = new TelegramBotClient(Token.tokenBot);
+        public static ITelegramBotClient bot = new TelegramBotClient(Token.tokenBot); //присваивание токена
         public static async Task HandleUpdateAsync(ITelegramBotClient telegram, Update update, CancellationToken token)
         {        
-            if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
+            if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message) // условие при -обновление- = -сообщение-
             {
-                Message message = update.Message;
+                Message message = update.Message; //непосредственно обновление
                 if (message.Text[0] == '/')
                 {
-                    Console.WriteLine("Bot cath command : " + message.Text);
+                    Console.WriteLine("Bot cath command : " + message.Text); 
+                    TextCommands.GetMessangeCommand(telegram, message, message.Text); //вызов обработчика команды
                 }
                 else
                 {
-                    if (message.ReplyToMessage != null)
+                    if (message.ReplyToMessage != null) //если сообщение является ОТВЕТОМ
                     {
-                        TextCommands.GetReplyMessage(telegram, message, update, message.Text, message.ReplyToMessage.Text);
+                        Console.WriteLine("Bot cath command : " + message.Text);
+                        TextCommands.GetReplyMessage(telegram, message, update, message.Text, message.ReplyToMessage.Text); 
                     }
                     else
                     {
-                        Console.WriteLine("Bot cath message : " + message.Text);
+                        Console.WriteLine("Bot cath message : " + message.Text); // вывод принятого сообщения
+                        TextCommands.GetMessangeCommand(telegram, message, message.Text); //вызов обработчика команды
                     }                    
-                }                
-                TextCommands.GetMessangeCommand(telegram, message, message.Text);
+                }                                
             }
-            else if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
+            else if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery) // если -тип о-
             {                
                 Message message = update.CallbackQuery.Message;
                 Console.WriteLine("Bot cath inline command : " + message.Text + " " + update.CallbackQuery.Data);

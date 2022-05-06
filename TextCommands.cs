@@ -21,6 +21,14 @@ namespace TelegaBot
                 {
                     telegram.SendTextMessageAsync(message.Chat, "/StartAction\n/StopAction\n/FuckYou\n/OhShitImSorry");
                 }
+                else if (command == "/Menu")
+                {
+                    telegram.SendTextMessageAsync(message.Chat, "Commands for Bot", null, null, false, false, 0, false, InlineCommands.commandListKeyboard);
+                }
+                else if (command == "/editeble")
+                {
+                        telegram.SendTextMessageAsync(message.Chat, "Menu", replyMarkup: InlineCommands.menuEditeble);                 
+                }
                 else if (command == "/key")
                 {
                     telegram.SendTextMessageAsync(message.Chat, "Text", null, null, false, false, 0, false, InlineCommands.keyboardKalKAL);
@@ -83,10 +91,6 @@ namespace TelegaBot
                 {
                     telegram.SendTextMessageAsync(message.Chat, "Incorect command");
                 }
-            }
-            else
-            {
-               
             }
         }
         public static void GetReplyMessage(ITelegramBotClient telegram, Message message, Update update, string content, string replyTo)
