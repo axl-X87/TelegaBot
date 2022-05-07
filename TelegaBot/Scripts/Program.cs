@@ -10,12 +10,15 @@ using Telegram.Bot.Exceptions;
 
 namespace TelegaBot
 {
+    /// <summary>
+    /// Логика для бота еблота АСУСУЕ
+    /// </summary>
 
     public class Program
     {
         public static ITelegramBotClient bot = new TelegramBotClient(Token.tokenBot);
         public static async Task HandleUpdateAsync(ITelegramBotClient telegram, Update update, CancellationToken token)
-        {            
+        {
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 Message message = update.Message;
@@ -25,14 +28,21 @@ namespace TelegaBot
                 }
                 else
                 {
-                    Console.WriteLine("Bot cath message : " + message.Text);
+                    if (message.MessageId >= InlineCommands.idAmountMessange && InlineCommands.idAmountMessange != null)
+                    {
+                        TextCommands.GetAmountMessage(telegram, message, update, message.Text);                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Bot cath message : " + message.Text);
+                    }
                 }
                 TextCommands.GetMessangeCommand(telegram, message, message.Text);
             }
             else if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
-            {                
+            {
                 Message message = update.CallbackQuery.Message;
-                Console.WriteLine("Bot cath inline command : " + message.Text);
+                Console.WriteLine("Bot cath inline command : " + message.Text + " " + update.CallbackQuery.Data);
                 InlineCommands.CallBack(telegram, update, message);
             }
         }

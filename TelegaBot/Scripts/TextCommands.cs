@@ -6,6 +6,8 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Exceptions;
+using System.Linq;
+using System.IO;
 
 namespace TelegaBot
 {
@@ -16,9 +18,17 @@ namespace TelegaBot
         {
             if (command[0] == '/')
             {
-                if (command == "/menuBot")
+                if (command == "/Menu")
                 {
-                    telegram.SendTextMessageAsync(message.Chat, "/StartAction\n/StopAction\n/FuckYou\n/OhShitImSorry");
+                    telegram.SendTextMessageAsync(message.Chat, "Commands for Bot", null, null, false, false, 0, false, InlineCommands.commandListKeyboard);
+                }
+                else if (command == "/editeble")
+                {
+                    telegram.SendTextMessageAsync(message.Chat, "Menu", replyMarkup: InlineCommands.GetKeyboard("int"));
+                }
+                else if (command == "/key")
+                {
+                    telegram.SendTextMessageAsync(message.Chat, "Text", null, null, false, false, 0, false, InlineCommands.keyboardKalKAL);
                 }
                 else if (command == "/StartAction")
                 {
@@ -30,44 +40,16 @@ namespace TelegaBot
                     active = false;
                     telegram.SendTextMessageAsync(message.Chat, "Stop work bot!");
                 }
-                else if (command == "/FuckYou")
+                else if (command == "/img")
                 {
-                    if (active == true)
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "No, Fuck You Leather Man", replyMarkup: InlineCommands.GetKeyboard("fuck"));
-                    }
-                    else
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "Bot is sleep");
-                    }
+                    FileStream fileSP = new FileStream(InlineCommands.pathPhoto, FileMode.Open, FileAccess.Read);
+                    telegram.SendPhotoAsync(chatId: message.Chat, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileSP), replyMarkup: InlineCommands.GetDBInline(0));
                 }
                 else if (command == "/null")
                 {
                     if (active == true)
                     {
-                        telegram.SendTextMessageAsync(message.Chat, "KAL", replyMarkup: InlineCommands.GetDBInline());
-                    }
-                    else
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "Bot is sleep");
-                    }
-                }
-                else if (command == "/Kal")
-                {
-                    if (active == true)
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "Kal?", replyMarkup: InlineCommands.GetKeyboard("kal"));
-                    }
-                    else
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "Bot is sleep");
-                    }
-                }
-                else if (command == "/OhShitImSorry")
-                {
-                    if (active == true)
-                    {
-                        telegram.SendTextMessageAsync(message.Chat, "Sorry for what?\nOur dad learn us not shame our dicks, exacly when he a such a good size.");
+                        telegram.SendTextMessageAsync(message.Chat, "Choose goods", replyMarkup: InlineCommands.GetDBInline(1));
                     }
                     else
                     {
@@ -79,9 +61,18 @@ namespace TelegaBot
                     telegram.SendTextMessageAsync(message.Chat, "Incorect command");
                 }
             }
-            else
+        }
+        public static void GetAmountMessage(ITelegramBotClient telegram, Message message, Update update, string content)
+        {
+            try
             {
-                telegram.SendTextMessageAsync(message.Chat, "good to say!");
+                int amount = Convert.ToInt32(content);
+                decimal price = ConnectClass.entities.TovarList.Where(i => i.id == InlineCommands.idGood).Select(i => i.PriceTovar).FirstOrDefault();
+                telegram.SendTextMessageAsync(message.Chat, $"You choosed {content} of {ConnectClass.entities.TovarList.Where(i => i.id == InlineCommands.idGood).Select(i => i.NameTovar).FirstOrDefault()} \nPrice = {price * amount}");
+            }
+            catch (Exception)
+            {
+                telegram.SendTextMessageAsync(message.Chat, "ТЫ ДОЛБОЕБ ТРЕХЪЯДЕРНЫЙ, ИЛИ ГДЕ?!\n ЦИФРУ, СУКА, ВВЕДИ МНЕ КОРРЕКТНУЮ, ПО ХОРОШЕМУ");
             }
         }
     }
