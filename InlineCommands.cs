@@ -8,84 +8,94 @@ using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Exceptions;
 using System.Linq;
 using TelegaBot.DataBase;
+using System.IO;
 
 namespace TelegaBot
 {
     public static class InlineCommands
     {
+        public static Nullable<int> idAmountMessange = null;
+        public static Nullable<int> idGood = null;
+        //public static string pathPhoto = "C:\\Users\\Привет!\\Desktop\\ЕБАТЬ ВАЖНО НАХУЙ.jpg";
+        public static string pathPhoto = "C:\\Users\\user5\\Desktop\\ПивоСветлое.jpg";
         public static string LastCallBack { get; set; }
-        public static InlineKeyboardMarkup keyboardFuckYou = new InlineKeyboardMarkup(new[] { new[] { InlineKeyboardButton.WithCallbackData("Fuck you", "fuck"), InlineKeyboardButton.WithCallbackData("No \nfuck you", "nFuck") } });
-        public static InlineKeyboardMarkup keyboardKal = new InlineKeyboardMarkup(new[] { new[] { InlineKeyboardButton.WithCallbackData("Kal\nKal\nKal\nKal\nKal\nKal\nKal\nKal\nKal\nKal\n", "manyKal"), InlineKeyboardButton.WithCallbackData("Kal\nKal\n", "someKal") } });
-        public static InlineKeyboardMarkup menuEditeble = new InlineKeyboardMarkup(new[] { new[] { InlineKeyboardButton.WithCallbackData("Fuck you", "fuck"), InlineKeyboardButton.WithCallbackData("Kal\nKal\n", "someKal") }, new[] { InlineKeyboardButton.WithCallbackData("Tovar List", "next") }   });
-        public static ReplyKeyboardMarkup keyboardKalKAL = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("Бебебе с Бабаба"), new KeyboardButton("Ломай меня полностью") }, new[] { new KeyboardButton("Ты можешь сломать меня"), new KeyboardButton("Я хочу чтоб ты ломал меня")  } });
-        public static ReplyKeyboardMarkup commandListKeyboard = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("/menuBot"), new KeyboardButton("/StartAction") }, new[] { new KeyboardButton("/null"), new KeyboardButton("/Kal") }, new[] {new KeyboardButton("/key") } });
+        public static InlineKeyboardButton[] buttonMass =
+        {
+            InlineKeyboardButton.WithCallbackData("Tovar List", "list"),
+            InlineKeyboardButton.WithCallbackData("Image", "img"),
+            InlineKeyboardButton.WithCallbackData("Back", "back"),
+            InlineKeyboardButton.WithCallbackData("Back", "backIMG"),
+        };
+        public static ReplyKeyboardMarkup keyboardKalKAL = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("Бебебе с Бабаба"), new KeyboardButton("Ломай меня полностью") }, new[] { new KeyboardButton("Ты можешь сломать меня"), new KeyboardButton("Я хочу чтоб ты ломал меня") } });
+        public static ReplyKeyboardMarkup commandListKeyboard = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("/editeble"), new KeyboardButton("/StartAction") }, new[] { new KeyboardButton("/null"), new KeyboardButton("/img") }, new[] { new KeyboardButton("/key") } });
         private static string[] _dataBaseMass = ConnectClass.entities.TovarListTelega.Select(i => i.NameTovar).ToArray();
+        private static int[] _dataBaseMassid = ConnectClass.entities.TovarListTelega.Select(i => i.id).ToArray();
         private static decimal[] _dataBaseMassP = ConnectClass.entities.TovarListTelega.Select(i => i.PriceTovar).ToArray();
-        public static InlineKeyboardMarkup GetDBInline()
+        public static InlineKeyboardMarkup GetDBInline(int variant)
         {
             InlineKeyboardButton[][] keyboardB = new InlineKeyboardButton[_dataBaseMass.Length + 1][];
-            InlineKeyboardButton[] inlines = new InlineKeyboardButton[2];
-            for (int i = 0; i < _dataBaseMass.Length; i++)
+            for (int id = 0; id < _dataBaseMass.Length; id++)
             {
-                keyboardB[i] = new[] { InlineKeyboardButton.WithCallbackData(_dataBaseMass[i] + " - " + _dataBaseMassP[i].ToString() + "₽", _dataBaseMass[i])};
+                keyboardB[id] = new[] { InlineKeyboardButton.WithCallbackData(_dataBaseMass[id] + " - " + _dataBaseMassP[id].ToString() + "₽", ConnectClass.entities.TovarListTelega.Where(i => i.id == id + 1).Select(i => i.id).FirstOrDefault().ToString()) };
             }
-            keyboardB[_dataBaseMass.Length] = new[] { InlineKeyboardButton.WithCallbackData("Go Back", "menu") };
+            if (variant == 1)
+            {
+                keyboardB[_dataBaseMass.Length] = new[] { buttonMass[2] };
+            }
+            else if (variant == 0)
+            {
+                keyboardB[_dataBaseMass.Length] = new[] { buttonMass[3] };
+            }
             InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboardB);
             return markup;
         }
         public static InlineKeyboardMarkup GetKeyboard(string catchCommand)
         {
-            if (catchCommand == "fuck")
+            if (catchCommand == "null")
             {
-                return keyboardFuckYou;
+                return GetDBInline(1);
             }
-            else if (catchCommand == "kal")
+            else if (catchCommand == "int")
             {
-                return keyboardKal;
-            }
-            else if (catchCommand == "null")
-            {
-                return GetDBInline();
+                return new[] { new[] { buttonMass[0] }, new[] { buttonMass[1] } };
             }
             else
             {
                 return null;
             }
         }
-        public static void CallBack(ITelegramBotClient telegram, Update update, Message message)
+        public static async void CallBack(ITelegramBotClient telegram, Update update, Message message)
         {
-            if (update.CallbackQuery.Data == "fuck")
+            Task task = Task.Delay(0);
+            if (update.CallbackQuery.Data == "list")
             {
-                telegram.EditMessageTextAsync(message.Chat, message.MessageId, "No, Fuck You Leather Man");
+                await telegram.EditMessageTextAsync(message.Chat, message.MessageId, "Choose goods", replyMarkup: GetDBInline(1));
             }
-            else if (update.CallbackQuery.Data == "nFuck")
+            else if (update.CallbackQuery.Data == "back")
             {
-                TextCommands.GetMessangeCommand(telegram, message, "/Kal");
+                await telegram.EditMessageTextAsync(message.Chat, message.MessageId, "Choose goods", replyMarkup: GetKeyboard("int"));
             }
-            else if (update.CallbackQuery.Data == "manyKal")
+            else if (update.CallbackQuery.Data == "backIMG")
             {
-                telegram.SendTextMessageAsync(message.Chat, "KAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\nKAL\n");
+                await telegram.DeleteMessageAsync(message.Chat, message.MessageId);
+                await telegram.SendTextMessageAsync(message.Chat, "Menu", replyMarkup: InlineCommands.GetKeyboard("int"));
             }
-            else if (update.CallbackQuery.Data == "someKal")
+            else if (update.CallbackQuery.Data == "img")
             {
-                telegram.EditMessageTextAsync(message.Chat, message.MessageId, "KAL\nKAL!");
+                
+                FileStream fileSP = new FileStream(InlineCommands.pathPhoto, FileMode.Open, FileAccess.Read);
+                await telegram.DeleteMessageAsync(message.Chat, message.MessageId);
+                await telegram.SendPhotoAsync(chatId: message.Chat, photo: new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileSP), replyMarkup: InlineCommands.GetDBInline(0));                
             }
-            else if (update.CallbackQuery.Data == "next")
-            {
-                telegram.EditMessageTextAsync(message.Chat, message.MessageId, "Choose goods", replyMarkup: GetDBInline());
-            }
-            else if (update.CallbackQuery.Data == "menu")
-            {
-                telegram.EditMessageTextAsync(message.Chat, message.MessageId, "Menu", replyMarkup: InlineCommands.menuEditeble);
-            }
-            else if (_dataBaseMass.Any(i => i == update.CallbackQuery.Data))
+            else if (_dataBaseMassid.Any(i => i.ToString() == update.CallbackQuery.Data))
             {
                 LastCallBack = null;
-                LastCallBack = update.CallbackQuery.Data;
-                telegram.SendTextMessageAsync(message.Chat, $"You choosed\n{update.CallbackQuery.Data}\nPrice : {ConnectClass.entities.TovarListTelega.Where(i => i.NameTovar == update.CallbackQuery.Data).Select(i => i.PriceTovar).FirstOrDefault().ToString()}₽");
-                telegram.SendTextMessageAsync(message.Chat, "How many you want? For answer - reply this message \n (^._.^)");
+                idGood = Convert.ToInt32(update.CallbackQuery.Data);
+                await telegram.SendTextMessageAsync(message.Chat, $"You choosed" +
+                    $"\n{ConnectClass.entities.TovarListTelega.Where(i => i.id == idGood).Select(i => i.NameTovar).FirstOrDefault() }" +
+                    $"\nPrice : {ConnectClass.entities.TovarListTelega.Where(i => i.id == idGood).Select(i => i.PriceTovar).FirstOrDefault().ToString()} ₽");
+                idAmountMessange = message.MessageId;
             }
         }
     }
 }
-
