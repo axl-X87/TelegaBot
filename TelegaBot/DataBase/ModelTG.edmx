@@ -5,45 +5,48 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="Хранилище TovarListTelegaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="TovarList">
+        <EntityType Name="ListTG">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NameTovar" Type="varchar" MaxLength="50" />
-          <Property Name="PriceTovar" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Photo" Type="varbinary(max)" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityContainer Name="Хранилище TovarListTelegaModelContainer">
-          <EntitySet Name="TovarList" EntityType="Self.TovarList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListTG" EntityType="Self.ListTG" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TovarListTelegaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="TovarList">
+        <EntityType Name="ListTG">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameTovar" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PriceTovar" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
-        <EntityContainer Name="TovarListTelegaEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="TovarList" EntityType="Self.TovarList" />
+        <EntityContainer Name="TovarListTelegaEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ListTG" EntityType="Self.ListTG" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище TovarListTelegaModelContainer" CdmEntityContainer="TovarListTelegaEntities">
-          <EntitySetMapping Name="TovarList">
-            <EntityTypeMapping TypeName="TovarListTelegaModel.TovarList">
-              <MappingFragment StoreEntitySet="TovarList">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TovarListTelegaModelContainer" CdmEntityContainer="TovarListTelegaEntities1">
+          <EntitySetMapping Name="ListTG">
+            <EntityTypeMapping TypeName="TovarListTelegaModel.ListTG">
+              <MappingFragment StoreEntitySet="ListTG">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="NameTovar" ColumnName="NameTovar" />
-                <ScalarProperty Name="PriceTovar" ColumnName="PriceTovar" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

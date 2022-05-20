@@ -13,10 +13,10 @@ namespace TelegaBot.DataBase
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TovarListTelegaEntities : DbContext
+    public partial class TovarListTelegaEntities1 : DbContext
     {
-        public TovarListTelegaEntities()
-            : base("name=TovarListTelegaEntities")
+        public TovarListTelegaEntities1()
+            : base("name=TovarListTelegaEntities1")
         {
         }
     
@@ -25,6 +25,6 @@ namespace TelegaBot.DataBase
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<TovarList> TovarList { get; set; }
+        public DbSet<ListTG> ListTG { get; set; }
     }
 }

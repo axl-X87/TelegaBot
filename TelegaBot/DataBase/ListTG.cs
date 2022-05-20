@@ -12,10 +12,11 @@ namespace TelegaBot.DataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class TovarList
+    public partial class ListTG
     {
         public int id { get; set; }
-        public string NameTovar { get; set; }
-        public decimal PriceTovar { get; set; }
+        public string Name { get; set; }
+        public byte[] Photo { get; set; }
+        public Nullable<decimal> Price { get; set; }
     }
 }

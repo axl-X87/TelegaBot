@@ -17,7 +17,6 @@ namespace TelegaBot
         public static Nullable<int> idAmountMessange = null;
         public static Nullable<int> idGood = null;
         public static string pathPhoto = "C:\\Users\\Привет!\\Desktop\\ЕБАТЬ ВАЖНО НАХУЙ.jpg";
-        public static string LastCallBack { get; set; }
         public static InlineKeyboardButton[] buttonMass =
         {
             InlineKeyboardButton.WithCallbackData("Tovar List", "list"),
@@ -26,15 +25,16 @@ namespace TelegaBot
         };
         public static ReplyKeyboardMarkup keyboardKalKAL = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("Бебебе с Бабаба"), new KeyboardButton("Ломай меня полностью") }, new[] { new KeyboardButton("Ты можешь сломать меня"), new KeyboardButton("Я хочу чтоб ты ломал меня") } });
         public static ReplyKeyboardMarkup commandListKeyboard = new ReplyKeyboardMarkup(new[] { new[] { new KeyboardButton("/menuBot"), new KeyboardButton("/StartAction") }, new[] { new KeyboardButton("/null"), new KeyboardButton("/Kal") }, new[] { new KeyboardButton("/key") } });
-        private static string[] _dataBaseMass = ConnectClass.entities.TovarList.Select(i => i.NameTovar).ToArray();
-        private static int[] _dataBaseMassid = ConnectClass.entities.TovarList.Select(i => i.id).ToArray();
-        private static decimal[] _dataBaseMassP = ConnectClass.entities.TovarList.Select(i => i.PriceTovar).ToArray();
+        private static string[] _dataBaseMass = ConnectClass.entities.ListTG.Select(i => i.Name).ToArray();
+        private static int[] _dataBaseMassid = ConnectClass.entities.ListTG.Select(i => i.id).ToArray();
+        public static byte[][] _dataBaseMassPH = ConnectClass.entities.ListTG.Select(i => i.Photo).ToArray();
+        private static Nullable<decimal>[] _dataBaseMassP = ConnectClass.entities.ListTG.Select(i => i.Price).ToArray();
         public static InlineKeyboardMarkup GetDBInline(int variant)
         {
             InlineKeyboardButton[][] keyboardB = new InlineKeyboardButton[_dataBaseMass.Length + variant][];
             for (int id = 0; id < _dataBaseMass.Length; id++)
             {
-                keyboardB[id] = new[] { InlineKeyboardButton.WithCallbackData(_dataBaseMass[id] + " - " + _dataBaseMassP[id].ToString() + "₽", ConnectClass.entities.TovarList.Where(i => i.id == id + 1).Select(i => i.id).FirstOrDefault().ToString()) };
+                keyboardB[id] = new[] { InlineKeyboardButton.WithCallbackData(ConnectClass.entities.ListTG.Where(i => i.id == id + 1).Select(i => i.id).FirstOrDefault().ToString(), ConnectClass.entities.ListTG.Where(i => i.id == id + 1).Select(i => i.id).FirstOrDefault().ToString()) };
             }
             if (variant == 1)
             {
@@ -76,11 +76,10 @@ namespace TelegaBot
             }
             else if (_dataBaseMassid.Any(i => i.ToString() == update.CallbackQuery.Data))
             {
-                LastCallBack = null;
                 idGood = Convert.ToInt32(update.CallbackQuery.Data);
                 telegram.SendTextMessageAsync(message.Chat, $"You choosed" +
-                    $"\n{ConnectClass.entities.TovarList.Where(i => i.id == idGood).Select(i => i.NameTovar).FirstOrDefault() }" +
-                    $"\nPrice : {ConnectClass.entities.TovarList.Where(i => i.id == idGood).Select(i => i.PriceTovar).FirstOrDefault().ToString()} ₽");
+                    $"\n{ConnectClass.entities.ListTG.Where(i => i.id == idGood).Select(i => i.Name).FirstOrDefault() }" +
+                    $"\nPrice : {ConnectClass.entities.ListTG.Where(i => i.id == idGood).Select(i => i.Price).FirstOrDefault().ToString()} ₽");
                 idAmountMessange = message.MessageId;
             }
         }

@@ -9,6 +9,6 @@ namespace TelegaBot
 {
     public static class ConnectClass
     {
-        public static TovarListTelegaEntities entities  = new TovarListTelegaEntities();
+        public static TovarListTelegaEntities1 entities = new TovarListTelegaEntities1();   
     }
 }
